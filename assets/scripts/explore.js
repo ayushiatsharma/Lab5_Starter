@@ -51,10 +51,10 @@ function init() {
 
     window.speechSynthesis.speak(speech);
     
-    // console.log(amISpeaking);
     let res = document.querySelectorAll('img')[0]
-    res.setAttribute("src", "assets/images/smiling-open.png");
-
+    if(textEntered != '') {
+      res.setAttribute("src", "assets/images/smiling-open.png");
+    }
 
     speech.onend = function(event) {
     //  console.log('Utterance has finished being spoken after ' + event.elapsedTime + ' seconds.');
