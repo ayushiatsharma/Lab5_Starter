@@ -16,68 +16,56 @@ function init() {
  
   //get text entered by the user 
   let input = document.getElementById('text-to-speak');
-
   input.addEventListener('change', updateValue);
-
   function updateValue(e) {
     textEntered = e.target.value;
   } 
 
   //get which voice is selected: 
   const selectElement = document.getElementById('voice-select');
-
-
-
   selectElement.addEventListener('change', (event) => {
-   
+    //get the attribute name from the selected option from the dropdown 
     voiceSelected = event.target.options[event.target.selectedIndex].getAttribute('data-name');
   });
 
-
-  //Press button stuff:
+  //Press button related stuff:
   const button = document.querySelector('button');
   button.addEventListener('click', event => {
-   
-  let voices = speechSynthesis.getVoices();
-  console.log(voices[0].name);
-  console.log(voiceSelected);
-  let test;
- 
-  for(let i = 0; i < voices.length ; i++) {
-    if(voices[i].name === voiceSelected) {
-      test = voices[i];
-    }
-  }
-
-
-  let speech = new SpeechSynthesisUtterance();
-
-  speech.lang = "en-US";
-  speech.text = textEntered;
-  speech.volume = 1;
-  speech.rate = 1;
-  speech.pitch = 1;    
-  speech.voice = test;            
-
-  window.speechSynthesis.speak(speech);
-
-  let amISpeaking = window.speechSynthesis.speaking;
-
-  console.log(amISpeaking);
-  let res = document.querySelectorAll('img')[0]
-
-  // while (amISpeaking == true) { 
-  //   res.setAttribute("src", "assets/images/smiling-open.png");
-  // } 
-  // res.setAttribute("src", "assets/images/smiling.png");
+    let voices = speechSynthesis.getVoices();
+    let test;
   
+    for(let i = 0; i < voices.length ; i++) {
+      if(voices[i].name === voiceSelected) {
+        test = voices[i];
+      }
+    }
+
+    let speech = new SpeechSynthesisUtterance();
+
+    speech.lang = "en-US";
+    speech.text = textEntered;
+    speech.volume = 1;
+    speech.rate = 1;
+    speech.pitch = 1;    
+    speech.voice = test;            
+
+    window.speechSynthesis.speak(speech);
+    
+    // console.log(amISpeaking);
+    let res = document.querySelectorAll('img')[0]
+    res.setAttribute("src", "assets/images/smiling-open.png");
+
+
+    speech.onend = function(event) {
+    //  console.log('Utterance has finished being spoken after ' + event.elapsedTime + ' seconds.');
+      res.setAttribute("src", "assets/images/smiling.png");
+    }  
 
   });
 
-
-
 }
 
+//function copied over from MDN's documementation 
 function populateVoiceList() {
   if(typeof speechSynthesis === 'undefined') {
     return;
@@ -101,5 +89,4 @@ function populateVoiceList() {
 
 
 //questions about slider in expose section
-//why is amISpeaking always true 
 //do we need to take care of the case when there is not text entered but the user still presses the button
